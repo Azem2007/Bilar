@@ -1,1 +1,233 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bilförsäljning</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #f4f4f4;
+      color: #333;
+    }
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+    h1 {
+      margin: 0;
+    }
+    .admin-form {
+      background: white;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    .admin-form h2 {
+      margin-top: 0;
+    }
+    .admin-form label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    .admin-form input[type="text"],
+    .admin-form textarea {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .admin-form textarea {
+      resize: vertical;
+      height: 80px;
+    }
+    .admin-form button {
+      margin-top: 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .admin-form button:hover {
+      background-color: #0056b3;
+    }
+    .car-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+      gap: 20px;
+    }
+    .car-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .car-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .car-info {
+      padding: 15px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .car-info h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+    .car-info p {
+      flex-grow: 1;
+      margin: 0 0 15px;
+    }
+    .car-info .price {
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+    .contact-button {
+      background-color: #007bff;
+      border: none;
+      color: white;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .contact-button:hover {
+      background-color: #0056b3;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #222;
+      color: white;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Välkommen till Bilförsäljning</h1>
+    <p>Hitta din nästa bil här!</p>
+  </header>
+  <div class="container">
+    <section class="admin-form" aria-label="Lägg till ny bil">
+      <h2>Lägg till ny bil</h2>
+      <form id="addCarForm">
+        <label for="carName">Bilens namn:</label>
+        <input type="text" id="carName" required />
+
+        <label for="carDescription">Beskrivning:</label>
+        <textarea id="carDescription" required></textarea>
+
+        <label for="carPrice">Pris:</label>
+        <input type="text" id="carPrice" placeholder="Exempel: 250 000 kr" required />
+
+        <label for="carImage">Bild-URL:</label>
+        <input type="text" id="carImage" placeholder="https://example.com/bild.jpg" required />
+
+        <button type="submit">Lägg till bil</button>
+      </form>
+    </section>
+
+    <div class="car-list" id="carList">
+      <!-- Bilar läggs in här med JavaScript -->
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Bilförsäljning
+  </footer>
+
+  <script>
+    const cars = [
+      {
+        name: "Volvo XC90",
+        description: "Rymlig SUV med plats för hela familjen. Bra säkerhet och komfort.",
+        price: "350 000 kr",
+        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Volvo_XC90_2015_IMG_0097.jpg/320px-Volvo_XC90_2015_IMG_0097.jpg",
+        contactEmail: "info@bilforsaljning.se"
+      },
+      {
+        name: "BMW 320i",
+        description: "Sportig sedan med kraftfull motor och elegant design.",
+        price: "270 000 kr",
+        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/BMW_3_Series_--_03-02-2013.jpg/320px-BMW_3_Series_--_03-02-2013.jpg",
+        contactEmail: "info@bilforsaljning.se"
+      },
+      {
+        name: "Volkswagen Golf",
+        description: "Kompakt och bränslesnål bil, perfekt för stadsbilism.",
+        price: "150 000 kr",
+        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Volkswagen_Golf_2017_IMG_0016.jpg/320px-Volkswagen_Golf_2017_IMG_0016.jpg",
+        contactEmail: "info@bilforsaljning.se"
+      }
+    ];
+
+    const carList = document.getElementById('carList');
+
+    function renderCars() {
+      carList.innerHTML = '';
+      cars.forEach(car => {
+        const card = document.createElement('div');
+        card.className = 'car-card';
+        card.innerHTML = `
+          <img src="${car.img}" alt="${car.name}" />
+          <div class="car-info">
+            <h2>${car.name}</h2>
+            <p>${car.description}</p>
+            <div class="price">${car.price}</div>
+            <a href="mailto:${car.contactEmail}?subject=Intresse%20för%20${encodeURIComponent(car.name)}" class="contact-button">Kontakta oss</a>
+          </div>
+        `;
+        carList.appendChild(card);
+      });
+    }
+
+    renderCars();
+
+    const form = document.getElementById('addCarForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('carName').value.trim();
+      const description = document.getElementById('carDescription').value.trim();
+      const price = document.getElementById('carPrice').value.trim();
+      const img = document.getElementById('carImage').value.trim();
+      if (name && description && price && img) {
+        cars.push({
+          name,
+          description,
+          price,
+          img,
+          contactEmail: "info@bilforsaljning.se"
+        });
+        renderCars();
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>
 
